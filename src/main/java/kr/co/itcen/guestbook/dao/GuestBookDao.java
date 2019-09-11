@@ -39,14 +39,7 @@ public class GuestBookDao {
 			pstmt.setString(3, vo.getContents());
 			
 			pstmt.executeUpdate();		
-			
-			stmt = connection.createStatement();
-			rs = stmt.executeQuery("select last_insert_id()");			
-			if(rs.next()) {
-				Long no = rs.getLong(1);
-				vo.setNo(no);
-			}
-						
+								
 		} catch (SQLException e) {
 			System.out.println("error: " + e);
 		} finally {
