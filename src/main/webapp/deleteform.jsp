@@ -2,8 +2,7 @@
     pageEncoding="UTF-8"%>
     <%
     request.setCharacterEncoding("utf-8");
-    String no = request.getParameter("no");
-    
+    String no = request.getParameter("no");    
     %>
 <!DOCTYPE html>
 <html>

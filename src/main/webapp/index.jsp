@@ -5,7 +5,7 @@
     pageEncoding="UTF-8"%>
 <%
  	List<GuestBookVo> list = new GuestBookDao().getList();
-	int count = 1;
+	int count = list.size();
  %>
 <!DOCTYPE html>
 <html>
@@ -42,11 +42,11 @@
 			<td><a href="deleteform.jsp?no=<%=vo.getNo() %>">삭제</a></td>
 		</tr>
 		<tr>
-			<td colspan=4><%=vo.getContents() %></td>
+			<td colspan=4><%=vo.getContents().replaceAll("\n", "<br>") %></td>
 		</tr>
 	</table>
 	<%
-		count++;
+		count--;
 		}
 	%>
 </body>

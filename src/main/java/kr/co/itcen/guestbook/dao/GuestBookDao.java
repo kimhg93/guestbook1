@@ -27,8 +27,6 @@ public class GuestBookDao {
 	public void insert(GuestBookVo vo) {
 		Connection connection = null;		
 		PreparedStatement pstmt = null;
-		Statement stmt = null;
-		ResultSet rs = null;
 		try {
 			connection = getConnection();
 
@@ -44,12 +42,6 @@ public class GuestBookDao {
 			System.out.println("error: " + e);
 		} finally {
 			try {
-				if(rs!=null) {
-					rs.close();
-				}
-				if(stmt!=null) {
-					stmt.close();
-				}
 				if (pstmt != null) {
 					pstmt.close();
 				}
@@ -62,7 +54,7 @@ public class GuestBookDao {
 		}		
 	}
 
-	public void delete(String password, Long no) {
+	public void delete(GuestBookVo vo) {
 		Connection connection = null;
 		PreparedStatement pstmt = null;
 		try {
@@ -70,8 +62,8 @@ public class GuestBookDao {
 
 			String sql = "delete from guestbook where no=? and password=?";
 			pstmt = connection.prepareStatement(sql);
-			pstmt.setLong(1, no);
-			pstmt.setString(2, password);
+			pstmt.setLong(1, vo.getNo());
+			pstmt.setString(2, vo.getPassword());
 			pstmt.executeUpdate();			
 
 		} catch (SQLException e) {
@@ -98,7 +90,8 @@ public class GuestBookDao {
 		ResultSet rs = null;
 		try {
 			connection = getConnection();
-			String sql = "select no, name, contents, password, reg_date from guestbook order by no desc";
+			String sql = "select no, name, contents, date_format(reg_date, '%Y-%m-%d %h:%i:%s')"
+					   + " from guestbook order by reg_date desc";
 			pstmt = connection.prepareStatement(sql);
 
 			rs = pstmt.executeQuery();
@@ -106,18 +99,15 @@ public class GuestBookDao {
 			while(rs.next()) {
 				Long no = rs.getLong(1);
 				String name = rs.getString(2);
-				String contents = rs.getString(3);
-				String password = rs.getString(4);
-				String date = rs.getString(5);
+				String contents = rs.getString(3);				
+				String date = rs.getString(4);
 				
 				GuestBookVo vo = new GuestBookVo();
 				vo.setNo(no);
 				vo.setName(name);
 				vo.setContents(contents);
-				vo.setPassword(password);
 				vo.setDate(date);
-				
-				
+								
 				list.add(vo);
 			}
 		} catch (SQLException e) {
